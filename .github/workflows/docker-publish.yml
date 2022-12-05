@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 env:
-  # github.repository as <account>/<repo>
+  REGISTRY: docker.io
   IMAGE_NAME: forbiddenlake/sd-test
 
 jobs:
