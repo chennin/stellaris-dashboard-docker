@@ -2,7 +2,7 @@ Docker builds for [Stellaris Dashboard](https://github.com/eliasdoehne/stellaris
 
 ## Localisation files required
 
-As documented [here](https://github.com/eliasdoehne/stellaris-dashboard#names-and-localizations), you will need to know the location of and/or copy some of the game's localisation files to the some place docker can access them.
+As documented [here](https://github.com/eliasdoehne/stellaris-dashboard#names-and-localizations), you will need to know the location of and/or copy some of the game's localisation files to the place docker can access them.
 
 ## Docker Compose
 
@@ -23,7 +23,7 @@ docker-compose up -d
 Then head to http://localhost:28053
 
 
-Most of the configuration settings can be edited in the dashboard itself. Optionally, you can mount it externally by uncommenting the volume in `docker-compose.yaml` and running:
+Most of the configuration settings can be edited in the dashboard itself. Optionally, you can mount the config externally by uncommenting the volume in `docker-compose.yaml` and running:
 
 
 ```

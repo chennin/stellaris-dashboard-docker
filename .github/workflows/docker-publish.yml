@@ -9,8 +9,20 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
-  DOCKERFILE: debian/Dockerfile
-  SUFFIX:
+
+inputs:
+  dockerfile:
+    description: "Path to the Dockerfile"
+    required: true
+    default: "debian/Dockerfile"
+  checkout:
+    description: "What to git checkout"
+    required: true
+    default: "master"
+  suffix:
+    description: "What to suffix the tag with"
+    required: true
+    default: ""
 
 jobs:
   build:
@@ -46,7 +58,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            suffix=${{ env.SUFFIX }}
+            suffix=${{ env.INPUT_SUFFIX }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -55,7 +67,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ env.DOCKERFILE }}
+          file: ${{ env.INPUT_DOCKERFILE }}
+          build-args: |
+            SD_TAG="${{ env.INPUT_CHECKOUT }}"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
