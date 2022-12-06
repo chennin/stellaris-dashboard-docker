@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10-alpine3.17
 ARG SD_TAG="master"
 
 USER root
