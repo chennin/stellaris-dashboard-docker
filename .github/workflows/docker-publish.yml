@@ -1,6 +1,23 @@
 name: Docker
 on:
   workflow_dispatch:
+    inputs:
+      dockerfile:
+        description: "Path to the Dockerfile"
+        required: true
+        default: "debian/Dockerfile"
+        type: string
+      checkout:
+        description: "What to git checkout"
+        required: true
+        default: "master"
+        type: boolean
+      suffix:
+        description: "What to suffix the tag with"
+        required: true
+        default: ""
+        type: string
+
   schedule:
     - cron: '52 12 * * 1'
   push:
@@ -9,20 +26,6 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
-
-inputs:
-  dockerfile:
-    description: "Path to the Dockerfile"
-    required: true
-    default: "debian/Dockerfile"
-  checkout:
-    description: "What to git checkout"
-    required: true
-    default: "master"
-  suffix:
-    description: "What to suffix the tag with"
-    required: true
-    default: ""
 
 jobs:
   build:
