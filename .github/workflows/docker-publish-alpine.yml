@@ -1,4 +1,4 @@
-name: Docker
+name: Docker - Alpine
 on:
   workflow_dispatch:
 
