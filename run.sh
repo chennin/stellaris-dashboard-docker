@@ -14,7 +14,7 @@ sys.path.append("/home/stellaris/stellaris-dashboard")
 from stellarisdashboard import config
 
 config.logger.warning("Updating settings for Docker")
-config.CONFIG.HOSTSETTING = "0.0.0.0"
+config.CONFIG.host = "0.0.0.0"
 config.CONFIG.log_to_file = False
 config.CONFIG.polling_interval = 1
 if hasattr(config.CONFIG, "production"):
