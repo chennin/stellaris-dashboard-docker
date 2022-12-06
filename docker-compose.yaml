@@ -1,0 +1,18 @@
+version: '2.4'
+services:
+  stellaris-dashboard:
+    container_name: stellaris-dashboard
+    image: #####:latest
+    restart: unless-stopped
+    environment:
+      # Set SKIP_INITIAL_PARSE to anything to skip parsing existing saves
+      # when no parses exist. Leave it unset to parse them.
+      SKIP_INITIAL_PARSE: "yes"
+    ports:
+      - '127.0.0.1:28053:28053'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - './saves:/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games:ro'
+      - './localisation:/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english:ro'
+      - './output:/home/stellaris/stellaris-dashboard/output'
+#      - './config.yml:/home/stellaris/stellaris-dashboard/config.yml'
