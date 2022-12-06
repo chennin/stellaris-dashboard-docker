@@ -1,6 +1,10 @@
 name: Docker - Alpine
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '57 12 * * 1'
+  push:
+    branches: [ "main" ]
 
 env:
   REGISTRY: docker.io
