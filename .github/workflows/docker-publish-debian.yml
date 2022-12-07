@@ -11,7 +11,7 @@ env:
 
 jobs:
   delegate:
-    uses: ./.github/workflows/docker-publish.yml@main
+    uses: ./.github/workflows/docker-publish.yml
     secrets: inherit
     with:
       dockerfile: ${{ env.DOCKERFILE }}
