@@ -1,11 +1,12 @@
 name: Docker - Debian
 on:
+  worker_dispatch:
   schedule:
     - cron: '57 12 * * 1'
   push:
     branches: [ "main" ]
 
-env:
+env${{ steps.upstream.outputs.tag }}.outputs.suffix }}:
   SUFFIX:
   DOCKERFILE: debian/Dockerfile
 
@@ -25,3 +26,17 @@ jobs:
       dockerfile: ${{ needs.vars.outputs.dockerfile }}
       checkout: master
       suffix: ${{ needs.vars.outputs.suffix }}
+  get-tag:
+    uses: oprypin/find-latest-tag@v1
+    with:
+      repository: eliasdoehne/stellaris-dashboard
+      releases-only: true
+    id: upstream
+  invoke-build:
+    uses: ./.github/workflows/docker-publish.yml
+    needs: vars
+    secrets: inherit
+    with:
+      dockerfile: ${{ needs.vars.outputs.dockerfile }}
+      checkout: ${{ steps.upstream.outputs.tag }}
+      suffix: ${{ steps.upstream.outputs.tag }}.${{ needs.vars.outputs.suffix }}
