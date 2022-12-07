@@ -51,6 +51,7 @@ jobs:
       # https://github.com/actions/checkout
       - name: Checkout upstream repository
         uses: actions/checkout@v3
+        with:
           repository: eliasdoehne/stellaris-dashboard
 
       # Extract metadata (tags, labels) for Docker
