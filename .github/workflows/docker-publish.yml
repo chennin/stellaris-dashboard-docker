@@ -30,9 +30,9 @@ env:
 jobs:
   build:
     env:
-      DOCKERFILE: ${{ inputs.dockerfile || debian/Dockerfile }}
-      CHECKOUT: ${{ inputs.checkout || master }}
-      SUFFIX: ${{ inputs.suffix }}
+      DOCKERFILE: ${{ inputs.dockerfile || 'debian/Dockerfile' }}
+      CHECKOUT: ${{ inputs.checkout || 'master' }}
+      SUFFIX: ${{ inputs.suffix || '' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
