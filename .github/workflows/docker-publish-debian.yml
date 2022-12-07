@@ -1,4 +1,4 @@
-name: Docker - Alpine
+name: Docker - Debian
 on:
   schedule:
     - cron: '57 12 * * 1'
@@ -6,8 +6,8 @@ on:
     branches: [ "main" ]
 
 env:
-  SUFFIX: -alpine
-  DOCKERFILE: alpine/Dockerfile
+  SUFFIX: 
+  DOCKERFILE: debian/Dockerfile
 
 jobs:
   delegate:
