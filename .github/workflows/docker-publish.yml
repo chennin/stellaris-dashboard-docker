@@ -29,7 +29,10 @@ env:
 
 jobs:
   build:
-
+    env:
+      DOCKERFILE: ${{ inputs.dockerfile || debian/Dockerfile }}
+      CHECKOUT: ${{ inputs.checkout || master }}
+      SUFFIX: ${{ inputs.suffix }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -61,7 +64,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            suffix=${{ inputs.suffix }}
+            suffix=${{ env.SUFFIX }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -70,9 +73,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ inputs.dockerfile }}
+          file: ${{ env.DOCKERFILE }}
           build-args: |
-            SD_TAG=${{ inputs.checkout }}
+            SD_TAG=${{ env.CHECKOUT }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
