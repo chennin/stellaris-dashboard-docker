@@ -58,7 +58,7 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE }}
           build-args: |
-            SD_TAG="${{ env.WHAT_TO_CHECKOUT }}"
+            SD_TAG=${{ env.WHAT_TO_CHECKOUT }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

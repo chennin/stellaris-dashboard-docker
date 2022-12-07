@@ -72,7 +72,7 @@ jobs:
           context: .
           file: ${{ inputs.dockerfile }}
           build-args: |
-            SD_TAG="${{ inputs.checkout }}"
+            SD_TAG=${{ inputs.checkout }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
