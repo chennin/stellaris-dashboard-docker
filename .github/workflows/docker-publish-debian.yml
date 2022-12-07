@@ -1,4 +1,4 @@
-name: Docker - Alpine
+name: Docker - Debian
 on:
   schedule:
     - cron: '57 12 * * 1'
@@ -19,7 +19,7 @@ jobs:
       - run: echo "Exposing env vars"
   invoke-build:
     uses: ./.github/workflows/docker-publish.yml
-    secrets: inherit
+    needs: vars
     with:
       dockerfile: ${{ needs.vars.outputs.dockerfile }}
       checkout: master
