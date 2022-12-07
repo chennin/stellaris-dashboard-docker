@@ -34,18 +34,6 @@ jobs:
       packages: write
 
     steps:
-      # https://github.com/actions/checkout
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          path: main
-
-      - name: Checkout upstream
-        uses: actions/checkout@v3
-        with:
-          repository: eliasdoehne/stellaris-dashboard
-          path: stellaris-dashboard
-
       # https://github.com/docker/setup-buildx-action
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
@@ -60,12 +48,16 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
           
+      # https://github.com/actions/checkout
+      - name: Checkout upstream repository
+        uses: actions/checkout@v3
+          repository: eliasdoehne/stellaris-dashboard
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4
-        working-directory: ./stellaris-dashboard
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -74,19 +66,21 @@ jobs:
           flavor: |
             suffix=${{ env.SUFFIX }}
 
+      # https://github.com/actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
 #      - name: Build and push Docker image
 #        id: build-and-push
 #        uses: docker/build-push-action@v3
 #        with:
-#          working-directory: ./main
 #          context: .
 #          file: ${{ env.DOCKERFILE }}
 #          build-args: |
 #            SD_TAG=${{ env.CHECKOUT }}
 #          push: ${{ github.event_name != 'pull_request' }}
 #          tags: ${{ steps.meta.outputs.tags }}
-#          labels: ${{ steps.meta.outputs.labels }}
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
