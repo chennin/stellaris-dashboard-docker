@@ -11,7 +11,7 @@ on:
         description: "What to git checkout"
         required: true
         default: "master"
-        type: boolean
+        type: string
       suffix:
         description: "What to suffix the tag with"
         required: true

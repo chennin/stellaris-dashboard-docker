@@ -17,6 +17,7 @@ config.logger.warning("Updating settings for Docker")
 config.CONFIG.host = "0.0.0.0"
 config.CONFIG.log_to_file = False
 config.CONFIG.polling_interval = 1
+config.CONFIG.check_version = False
 if hasattr(config.CONFIG, "production"):
   config.CONFIG.production = True
 

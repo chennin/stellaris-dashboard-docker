@@ -11,6 +11,7 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
   DOCKERFILE: alpine/Dockerfile
   SUFFIX: -alpine
+  WHAT_TO_CHECKOUT: "master"
 
 jobs:
   build:
@@ -56,6 +57,8 @@ jobs:
         with:
           context: .
           file: ${{ env.DOCKERFILE }}
+          build-args: |
+            SD_TAG="${{ env.WHAT_TO_CHECKOUT }}"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
