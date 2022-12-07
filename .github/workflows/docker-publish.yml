@@ -14,7 +14,7 @@ on:
         type: string
       suffix:
         description: "What to suffix the tag with"
-        required: true
+        required: false
         default: ""
         type: string
 
@@ -61,7 +61,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            suffix=${{ github.event.inputs.suffix }}
+            suffix=${{ inputs.suffix }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -70,9 +70,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ github.event.inputs.dockerfile }}
+          file: ${{ inputs.dockerfile }}
           build-args: |
-            SD_TAG="${{ github.event.inputs.checkout }}"
+            SD_TAG="${{ inputs.checkout }}"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

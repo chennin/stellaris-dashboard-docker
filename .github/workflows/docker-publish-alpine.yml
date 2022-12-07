@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
   DOCKERFILE: alpine/Dockerfile
   SUFFIX: -alpine
-  WHAT_TO_CHECKOUT: "master"
+  WHAT_TO_CHECKOUT: master
 
 jobs:
   build:
