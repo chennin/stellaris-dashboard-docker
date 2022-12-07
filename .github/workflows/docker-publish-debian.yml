@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "main" ]
 
-env${{ steps.upstream.outputs.tag }}.outputs.suffix }}:
+env:
   SUFFIX:
   DOCKERFILE: debian/Dockerfile
 

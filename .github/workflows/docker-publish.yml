@@ -43,7 +43,7 @@ jobs:
       - name: Checkout upstream
         uses: actions/checkout@v3
         with:
-          repository: my-org/my-tools
+          repository: eliasdoehne/stellaris-dashboard
           path: stellaris-dashboard
 
       # https://github.com/docker/setup-buildx-action
