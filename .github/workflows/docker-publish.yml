@@ -5,17 +5,17 @@ on:
       dockerfile:
         description: "Path to the Dockerfile"
         required: true
-        default: "debian/Dockerfile"
+        default: debian/Dockerfile
         type: string
       checkout:
         description: "What to git checkout"
         required: true
-        default: "master"
+        default: master
         type: string
       suffix:
         description: "What to suffix the tag with"
         required: false
-        default: ""
+        default:
         type: string
 
   schedule:
