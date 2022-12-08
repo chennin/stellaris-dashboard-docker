@@ -20,6 +20,7 @@ jobs:
         id: upstream
       - run: echo "ref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
       - run: echo "ref=master" >> $GITHUB_OUTPUT
+      - run: echo ${{ toJSON(steps.*.outputs.ref) }}
     outputs:
       refs: ${{ toJSON(steps.*.outputs.ref) }}
   build:
