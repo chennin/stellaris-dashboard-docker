@@ -71,6 +71,6 @@ jobs:
             DEBIAN_VER=${{ matrix.alpinever }}
           push: ${{ github.event_name != 'pull_request' }}
           pull: true
-          tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-debian-${{ matrix.alpinever }}-py${{ matrix.pyver }}
+          tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
