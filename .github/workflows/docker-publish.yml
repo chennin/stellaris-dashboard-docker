@@ -1,33 +1,21 @@
 name: Docker
 on:
-  workflow_call:
-    inputs:
-      dockerfile:
-        description: "Path to the Dockerfile"
-        required: true
-        default: debian/Dockerfile
-        type: string
-      checkout:
-        description: "What to git checkout"
-        required: true
-        default: master
-        type: string
-      suffix:
-        description: "What to suffix the tag with"
-        required: false
-        default:
-        type: string
+  workflow_dispatch:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
+  IMAGE_NAME: {{ secrets.DOCKER_USER }}/sd-test
+  DF_DEBIAN: debian/Dockerfile
+  DF_ALPINE: alpine/Dockerfile
 
 jobs:
   build:
-    env:
-      DOCKERFILE: ${{ inputs.dockerfile }}
-      CHECKOUT: ${{ inputs.checkout }}
-      SUFFIX: ${{ inputs.suffix }}
+    strategy:
+      matrix:
+        pyver: [ 3.8, 3.10 ]
+        debianver: [ bullseye ]
+        alpinever: [ 3.17 ]
+        checkout: [ master, v43 ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,39 +37,23 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
           
       # https://github.com/actions/checkout
-      - name: Checkout upstream repository
-        uses: actions/checkout@v3
-        with:
-          repository: eliasdoehne/stellaris-dashboard
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=edge
-            type=semver,pattern={{version}}
-          flavor: |
-            suffix=${{ env.SUFFIX }}
-
-      # https://github.com/actions/checkout
       - name: Checkout repository
         uses: actions/checkout@v3
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-#      - name: Build and push Docker image
-#        id: build-and-push
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: .
-#          file: ${{ env.DOCKERFILE }}
-#          build-args: |
-#            SD_TAG=${{ env.CHECKOUT }}
-#          push: ${{ github.event_name != 'pull_request' }}
-#          tags: ${{ steps.meta.outputs.tags }}
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ${{ env.DF_DEBIAN }}
+          build-args: |
+            SD_TAG=${{ matrix.checkout }}
+            PY_VER=${{ matrix.pyver }}
+            DEBIAN_VER=${{ matrix.debianver }}
+          push: false #${{ github.event_name != 'pull_request' }}
+          pull: true
+          tags: ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

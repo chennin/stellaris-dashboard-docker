@@ -1,4 +1,6 @@
-FROM python:3.10-slim-bullseye
+ARG PY_VER="3.10"
+ARG DEBIAN_VER="bullseye"
+FROM python:${PY_VER}-slim-${DEBIAN_VER}
 ARG SD_TAG="master"
 
 USER root

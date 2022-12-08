@@ -1,4 +1,6 @@
-FROM python:3.10-alpine3.17
+ARG PY_VER="3.10"
+ARG ALPINE_VER="3.17"
+FROM python:${PY_VER}-alpine${ALPINE_VER}
 ARG SD_TAG="master"
 
 USER root

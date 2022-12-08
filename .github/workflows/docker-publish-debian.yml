@@ -1,10 +1,6 @@
 name: Docker - Debian
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '57 12 * * 1'
-  push:
-    branches: [ "main" ]
 
 env:
   SUFFIX:
@@ -25,7 +21,7 @@ jobs:
     with:
       dockerfile: ${{ needs.vars.outputs.dockerfile }}
       checkout: master
-      suffix: ${{ needs.vars.outputs.suffix }}
+      tags: edge${{ needs.vars.outputs.suffix }}
 #  get-tag:
 #    uses: oprypin/find-latest-tag@v1
 #    with:
