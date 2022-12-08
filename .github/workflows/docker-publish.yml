@@ -56,8 +56,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
 
       - name: Build and push Docker Alpine image
         id: build-and-push-alpine
@@ -72,5 +72,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
