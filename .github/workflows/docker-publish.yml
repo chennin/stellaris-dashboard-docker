@@ -22,7 +22,7 @@ jobs:
         id: latest-release
       - run: echo "buildref=master" >> $GITHUB_OUTPUT
         id: main-branch
-      - run: echo ${{ toJSON(steps.*.outputs.buildref) }}
+      - run: echo "Refs to build ${{ toJSON(steps.*.outputs.buildref) }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
   build:
