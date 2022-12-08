@@ -10,6 +10,14 @@ env:
   DF_ALPINE: alpine/Dockerfile
 
 jobs:
+  get-tag:
+    steps:
+    - uses: oprypin/find-latest-tag@v1
+      with:
+        repository: eliasdoehne/stellaris-dashboard
+        releases-only: true
+      id: upstream
+    - run: echo "version ${{ steps.upstream.outputs.tag }}"
   build:
     strategy:
       matrix:
@@ -53,7 +61,7 @@ jobs:
             SD_TAG=${{ matrix.checkout }}
             PY_VER=${{ matrix.pyver }}
             DEBIAN_VER=${{ matrix.debianver }}
-          push: ${{ github.event_name != 'pull_request' }}
+          push: false #${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
@@ -69,7 +77,7 @@ jobs:
             SD_TAG=${{ matrix.checkout }}
             PY_VER=${{ matrix.pyver }}
             DEBIAN_VER=${{ matrix.alpinever }}
-          push: ${{ github.event_name != 'pull_request' }}
+          push: false #${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
