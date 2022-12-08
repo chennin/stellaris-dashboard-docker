@@ -28,7 +28,7 @@ jobs:
           echo "latest-alpine=${{ steps.upstream.outputs.tag }}-alpine-${{ env.LATEST_ALPINE }}-py${{ env.LATEST_PY }}" >> $GITHUB_OUTPUT
           echo "buildref=master" >> $GITHUB_OUTPUT
       - run: echo "Refs to build ${{ toJSON(steps.*.outputs.buildref) }}"
-      - run: echo "Latest ${{ steps.latest-release.outputs.latest }}"
+      - run: echo "Latest ${{ steps.info.outputs.latest }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
       latest: ${{ steps.info.outputs.latest }}
