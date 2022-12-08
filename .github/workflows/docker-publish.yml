@@ -100,22 +100,15 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
           cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
 
+  tag:
+    runs-on: ubuntu-latest
+    needs:
+      - get-refs
+      - build
+    steps:
       - name: Tag latest Debian image
-        uses: shrink/actions-docker-registry-tag@v3
+        uses: silverlyra/latest-image-action@v0.1
         with:
-          registry: ${{ env.REGISTRY }}
           repository: ${{ env.IMAGE_NAME }}
-          target: ${{ needs.get-refs.outputs.latest }}
-          tags: |
-            latest
-            latest-debian
-
-      - name: Tag latest Alpine image
-        uses: shrink/actions-docker-registry-tag@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          repository: ${{ env.IMAGE_NAME }}
-          target: ${{ needs.get-refs.outputs.latest-alpine }}
-          tags: |
-            latest
-            latest-debian
+          candidate-tag: ${{ needs.get-refs.outputs.latest }}
+          version-source: ${{ fromJSON(needs.get-refs.outputs.buildrefs)[0] }}
