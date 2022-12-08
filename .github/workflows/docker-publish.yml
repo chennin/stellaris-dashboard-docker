@@ -107,7 +107,7 @@ jobs:
       - build
     steps:
       - name: Tag latest Debian image
-        uses: silverlyra/latest-image-action@v0.1
+        uses: silverlyra/latest-image-action@v0.1.0
         with:
           repository: ${{ env.IMAGE_NAME }}
           candidate-tag: ${{ needs.get-refs.outputs.latest }}
