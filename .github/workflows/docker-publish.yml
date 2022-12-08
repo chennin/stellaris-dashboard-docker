@@ -11,6 +11,7 @@ env:
 
 jobs:
   get-tag:
+    runs-on: ubuntu-latest
     steps:
     - uses: oprypin/find-latest-tag@v1
       with:
