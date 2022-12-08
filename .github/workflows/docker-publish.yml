@@ -24,6 +24,7 @@ jobs:
       - id: info
         run: |
           echo "buildref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
+          echo "latest-ref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
           echo "latest=${{ steps.upstream.outputs.tag }}-debian-${{ env.LATEST_DEBIAN }}-py${{ env.LATEST_PY }}" >> $GITHUB_OUTPUT
           echo "latest-alpine=${{ steps.upstream.outputs.tag }}-alpine-${{ env.LATEST_ALPINE }}-py${{ env.LATEST_PY }}" >> $GITHUB_OUTPUT
           echo "buildref=master" >> $GITHUB_OUTPUT
@@ -31,6 +32,7 @@ jobs:
       - run: echo "Latest ${{ steps.info.outputs.latest }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
+      latest-ref: ${{ steps.info.outputs.latest-ref }}
       latest: ${{ steps.info.outputs.latest }}
       latest-alpine: ${{ steps.info.outputs.latest-alpine }}
   build:
@@ -111,4 +113,4 @@ jobs:
         with:
           repository: ${{ env.IMAGE_NAME }}
           candidate-tag: ${{ needs.get-refs.outputs.latest }}
-          version-source: ${{ fromJSON(needs.get-refs.outputs.buildrefs)[0] }}
+          version-source: env:${{ needs.get-refs.outputs.latest-ref }}
