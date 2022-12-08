@@ -21,19 +21,18 @@ jobs:
           repository: eliasdoehne/stellaris-dashboard
           releases-only: true
         id: upstream
-      - id: latest-release
+      - id: info
         run: |
-          buildref=${{ steps.upstream.outputs.tag }}
-          latest=${{ steps.upstream.outputs.tag }}-debian-${{ env.LATEST_DEBIAN }}-py${{ env.LATEST_PY }}
-          latest-alpine=${{ steps.upstream.outputs.tag }}-alpine-${{ env.LATEST_ALPINE }}-py${{ env.LATEST_PY }} >> $GITHUB_OUTPUT
-      - id: main-branch
-        run: echo "buildref=master" >> $GITHUB_OUTPUT
+          echo "buildref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
+          echo "latest=${{ steps.upstream.outputs.tag }}-debian-${{ env.LATEST_DEBIAN }}-py${{ env.LATEST_PY }}" >> $GITHUB_OUTPUT
+          echo "latest-alpine=${{ steps.upstream.outputs.tag }}-alpine-${{ env.LATEST_ALPINE }}-py${{ env.LATEST_PY }}" >> $GITHUB_OUTPUT
+          echo "buildref=master" >> $GITHUB_OUTPUT
       - run: echo "Refs to build ${{ toJSON(steps.*.outputs.buildref) }}"
       - run: echo "Latest ${{ steps.latest-release.outputs.latest }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
-      latest: ${{ steps.latest-release.outputs.latest }}
-      latest-alpine: ${{ steps.latest-release.outputs.latest-alpine }}
+      latest: ${{ steps.info.outputs.latest }}
+      latest-alpine: ${{ steps.info.outputs.latest-alpine }}
   build:
     runs-on: ubuntu-latest
     needs:
