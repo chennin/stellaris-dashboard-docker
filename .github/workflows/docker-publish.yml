@@ -19,7 +19,9 @@ jobs:
           releases-only: true
         id: upstream
       - run: echo "buildref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
+        id: latest-release
       - run: echo "buildref=master" >> $GITHUB_OUTPUT
+        id: main-branch
       - run: echo ${{ toJSON(steps.*.outputs.buildref) }}
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
