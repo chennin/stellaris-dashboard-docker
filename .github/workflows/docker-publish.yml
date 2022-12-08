@@ -18,11 +18,11 @@ jobs:
           repository: eliasdoehne/stellaris-dashboard
           releases-only: true
         id: upstream
-      - run: echo "ref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
-      - run: echo "ref=master" >> $GITHUB_OUTPUT
-      - run: echo ${{ toJSON(steps.*.outputs.ref) }}
+      - run: echo "buildref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
+      - run: echo "buildref=master" >> $GITHUB_OUTPUT
+      - run: echo ${{ toJSON(steps.*.outputs.buildref) }}
     outputs:
-      refs: ${{ toJSON(steps.*.outputs.ref) }}
+      buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
   build:
     runs-on: ubuntu-latest
     needs:
@@ -32,7 +32,7 @@ jobs:
         pyver: [ "3.8", "3.10" ]
         debianver: [ bullseye ]
         alpinever: [ "3.17" ]
-        checkout: ${{ fromJSON(needs.get-refs.outputs.refs) }}
+        checkout: ${{ fromJSON(needs.get-refs.outputs.buildrefs) }}
     permissions:
       contents: read
       packages: write
