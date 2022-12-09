@@ -101,7 +101,7 @@ jobs:
             SD_TAG=${{ matrix.checkout }}
             PY_VER=${{ matrix.pyver }}
             OS_VER=${{ matrix.osver }}
-          push: false #${{ github.event_name != 'pull_request' }}
+          push: true
           pull: true
           tags: ${{ join(steps.*.outputs.tag, ',') }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}
