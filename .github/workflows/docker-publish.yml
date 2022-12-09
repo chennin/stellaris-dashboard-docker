@@ -68,6 +68,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Image Tag Strategy
+        id: tagging
+        uses: HackerHappyHour/tagging-strategy@v3
+        with:
+          image_name: ${{ env.IMAGE_NAME }}
+          tag_name: ${{ matrix.checkout }}
+          tags: |
+            %X%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+          extra_tags: |
+            latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' }}
+            latest-debian::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' }}
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker Debian image
@@ -82,35 +94,6 @@ jobs:
             DEBIAN_VER=${{ matrix.debianver }}
           push: false #${{ github.event_name != 'pull_request' }}
           pull: true
-          tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+          tags: ${{ steps.tagging.outputs.tag }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
-
-      - name: Build and push Docker Alpine image
-        id: build-and-push-alpine
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ${{ env.DF_ALPINE }}
-          build-args: |
-            SD_TAG=${{ matrix.checkout }}
-            PY_VER=${{ matrix.pyver }}
-            DEBIAN_VER=${{ matrix.alpinever }}
-          push: false #${{ github.event_name != 'pull_request' }}
-          pull: true
-          tags: ${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
-          cache-from: type=gha,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-alpine-${{ matrix.alpinever }}-py${{ matrix.pyver }}
-
-  tag:
-    runs-on: ubuntu-latest
-    needs:
-      - get-refs
-      - build
-    steps:
-      - name: Tag latest Debian image
-        uses: silverlyra/latest-image-action@v0.1.0
-        with:
-          repository: ${{ env.IMAGE_NAME }}
-          candidate-tag: ${{ needs.get-refs.outputs.latest }}
-          version-source: env:${{ needs.get-refs.outputs.latest-ref }}
