@@ -28,8 +28,8 @@ env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
   MAIN_BRANCH: master
-  LATEST_PY: "3.10"
-  OS_NAME: debian
+  STABLE_PY: "3.10"
+  STABLE_OS: "debian"
 
 jobs:
   get-refs:
@@ -83,15 +83,15 @@ jobs:
 
       - id: tag
         run: |
-          echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-${{ env.OS_NAME }}-${{ matrix.osver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
+          echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
       - id: tag-latest
-        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
+        if: ${{ env.STABLE_OS == inputs.osname && matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
       - id: tag-latest-os
         if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
         run: |
-          echo "tag=${{ env.IMAGE_NAME }}:latest-${{ env.OS_NAME }}" >> $GITHUB_OUTPUT
+          echo "tag=${{ env.IMAGE_NAME }}:latest-${{ inputs.osname }}" >> $GITHUB_OUTPUT
       - run: echo "${{ join(steps.*.outputs.tag) }}"
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -108,5 +108,5 @@ jobs:
           push: false #${{ github.event_name != 'pull_request' }}
           pull: true
           tags: ${{ join(steps.*.outputs.tag, ',') }}
-          cache-from: type=gha,scope=${{ matrix.checkout }}-${{ env.OS_NAME }}-${{ matrix.osver }}-py${{ matrix.pyver }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-${{ env.OS_NAME }}-${{ matrix.osver }}-py${{ matrix.pyver }}
+          cache-from: type=gha,scope=${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}
