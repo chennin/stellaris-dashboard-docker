@@ -75,9 +75,10 @@ jobs:
         uses: HackerHappyHour/tagging-strategy@v3
         with:
           image_name: ${{ env.IMAGE_NAME }}
-          tag_name: ${{ matrix.checkout }}
+#          tag_name: ${{ matrix.checkout }}
           tags: |
-            %X%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+            ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+#            %X.Y%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           extra_tags: |
             latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
             latest-debian::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
