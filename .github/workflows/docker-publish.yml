@@ -70,20 +70,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Image Tag Strategy
-        id: tagging
-        uses: HackerHappyHour/tagging-strategy@v3
-        with:
-          image_name: ${{ env.IMAGE_NAME }}
-          tag_name: ${{ matrix.checkout }}
-          tags: |
-            %X.Y%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
-          extra_tags: |
-            ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
-            latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
-            latest-debian::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
-
-      - run: echo "${{ steps.tagging.outputs.tags }}"
+      - id: tag
+        run: |
+          echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
+      - id: tag-latest
+        if: ${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
+        run: |
+          echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+      - id: tag-latest-os
+        if: ${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
+        run: |
+          echo "tag=${{ env.IMAGE_NAME }}:latest-debian" >> $GITHUB_OUTPUT
+      - run: echo "${{ join(steps.*.outputs.tag) }}"
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker Debian image
@@ -98,6 +96,6 @@ jobs:
             DEBIAN_VER=${{ matrix.debianver }}
           push: false #${{ github.event_name != 'pull_request' }}
           pull: true
-          tags: ${{ steps.tagging.outputs.tags }}
+          tags: ${{ join(steps.*.outputs.tag, ',') }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
