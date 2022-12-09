@@ -40,6 +40,10 @@ mkdir output
 chown 1000:1000 output
 ```
 
+## Parsing existing saves
+
+If you have existing saves that you want the dashboard to parse, then in `.env` change `SKIP_INITIAL_PARSE` to `"true"` (case sensitive). **This can be slow!**
+
 ## Run the image with docker-compose
 
 Run:

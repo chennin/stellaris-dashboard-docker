@@ -7,7 +7,7 @@ services:
     environment:
       # Set SKIP_INITIAL_PARSE to "true" to skip parsing existing saves
       # when no parses exist. Case sensitive.
-      SKIP_INITIAL_PARSE: "true"
+      SKIP_INITIAL_PARSE: ${SKIP_INITIAL_PARSE}
     ports:
       - '127.0.0.1:28053:28053'
     volumes:
