@@ -1,0 +1,13 @@
+name: Docker Alpine
+on:
+  workflow_dispatch:
+
+jobs:
+  run-build:
+    uses: ./.github/workflows/docker-publish.yml
+    secrets: inherit
+    with:
+      osname: 'alpine'
+      osstablever: '3.17'
+      pythonvers: '[ "3.8", "3.10" ]'
+      osvers: '[ "3.17" ]'

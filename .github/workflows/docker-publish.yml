@@ -4,24 +4,20 @@ on:
   workflow_call:
     inputs:
       osname:
-#        required: true
+        required: true
         type: string
-        default: 'debian'
         description: 'Name of the operating system'
       osstablever:
-#        required: true
+        required: true
         type: string
-        default: 'bullseye'
         description: 'Stable version of the OS'
       pythonvers:
-#        required: true
+        required: true
         type: string
-        default: '[ "3.8", "3.10" ]'
         description: 'JSON array of Python versions to build'
       osvers:
-#        required: true
+        required: true
         type: string
-        default: '[ "bullseye" ]'
         description: 'JSON array of OS versions to build'
 
 env:
@@ -85,11 +81,11 @@ jobs:
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
       - id: tag-latest
-        if: ${{ env.STABLE_OS == inputs.osname && matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
+        if: ${{ env.STABLE_OS == inputs.osname && matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout != 'master' }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
       - id: tag-latest-os
-        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
+        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout != 'master' }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest-${{ inputs.osname }}" >> $GITHUB_OUTPUT
       - run: echo "${{ join(steps.*.outputs.tag) }}"
