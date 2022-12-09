@@ -1,7 +1,28 @@
 ##
 name: Docker
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      osname:
+#        required: true
+        type: string
+        default: 'debian'
+        description: 'Name of the operating system'
+      osstablever:
+#        required: true
+        type: string
+        default: 'bullseye'
+        description: 'Stable version of the OS'
+      pythonvers:
+#        required: true
+        type: string
+        default: '[ "3.8", "3.10" ]'
+        description: 'JSON array of Python versions to build'
+      osvers:
+#        required: true
+        type: string
+        default: '[ "bullseye" ]'
+        description: 'JSON array of OS versions to build'
 
 env:
   REGISTRY: docker.io
