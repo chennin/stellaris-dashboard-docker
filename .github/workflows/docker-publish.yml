@@ -76,9 +76,8 @@ jobs:
         with:
           image_name: ${{ env.IMAGE_NAME }}
           tag_name: ${{ matrix.checkout }}
-#          tags: |
-#            ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
-#            %X.Y%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
+          tags: |
+            %X.Y%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           extra_tags: |
             ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
             latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
