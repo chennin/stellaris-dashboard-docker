@@ -1,0 +1,12 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  run-build:
+    uses: ./.github/workflows/docker-publish.yml
+    secrets: inherit
+    with:
+      osname: 'debian'
+      osstablever: 'bullseye'
+      pythonvers: '[ "3.8", "3.10" ]'
+      osvers: '[ "bullseye" ]'
