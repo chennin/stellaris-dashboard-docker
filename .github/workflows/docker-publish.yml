@@ -28,10 +28,8 @@ env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/sd-test
   MAIN_BRANCH: master
-  DOCKERFILE: debian/Dockerfile
   LATEST_PY: "3.10"
   OS_NAME: debian
-  STABLE_OS_VER: bullseye
 
 jobs:
   get-refs:
@@ -57,8 +55,8 @@ jobs:
       - get-refs
     strategy:
       matrix:
-        pyver: [ "3.8", "3.10" ]
-        osver: [ bullseye ]
+        pyver: ${{ fromJSON(inputs.pythonvers) }}
+        osver: ${{ fromJSON(inputs.osvers) }}
         checkout: ${{ fromJSON(needs.get-refs.outputs.buildrefs) }}
     permissions:
       contents: read
@@ -87,11 +85,11 @@ jobs:
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-${{ env.OS_NAME }}-${{ matrix.osver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
       - id: tag-latest
-        if: ${{ matrix.osver == env.STABLE_OS_VER && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
+        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
       - id: tag-latest-os
-        if: ${{ matrix.osver == env.STABLE_OS_VER && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
+        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.LATEST_PY && matrix.checkout != 'master' }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest-${{ env.OS_NAME }}" >> $GITHUB_OUTPUT
       - run: echo "${{ join(steps.*.outputs.tag) }}"
@@ -102,7 +100,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ env.DOCKERFILE }}
+          file: ${{ inputs.osname }}/Dockerfile
           build-args: |
             SD_TAG=${{ matrix.checkout }}
             PY_VER=${{ matrix.pyver }}
