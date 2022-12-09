@@ -79,10 +79,10 @@ jobs:
           tags: |
             %X%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           extra_tags: |
-            latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' }}
-            latest-debian::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' }}
+            latest::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
+            latest-debian::${{ matrix.debianver == 'bullseye' && matrix.pyver == '3.10' && matrix.checkout != 'master' }}
 
-      - run: echo "${{ steps.tagging.outputs.tag }}"
+      - run: echo "${{ steps.tagging.outputs.tags }}"
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker Debian image
@@ -97,6 +97,6 @@ jobs:
             DEBIAN_VER=${{ matrix.debianver }}
           push: false #${{ github.event_name != 'pull_request' }}
           pull: true
-          tags: ${{ steps.tagging.outputs.tag }}
+          tags: ${{ steps.tagging.outputs.tags }}
           cache-from: type=gha,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
           cache-to: type=gha,mode=max,scope=${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
