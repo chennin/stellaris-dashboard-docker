@@ -75,7 +75,7 @@ jobs:
         uses: HackerHappyHour/tagging-strategy@v3
         with:
           image_name: ${{ env.IMAGE_NAME }}
-#          tag_name: ${{ matrix.checkout }}
+          tag_name: ${{ matrix.checkout }}
           tags: |
             ${{ matrix.checkout }}-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
 #            %X.Y%-debian-${{ matrix.debianver }}-py${{ matrix.pyver }}
