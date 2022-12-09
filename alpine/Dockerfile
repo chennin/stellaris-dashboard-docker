@@ -1,6 +1,6 @@
 ARG PY_VER="3.10"
-ARG ALPINE_VER="3.17"
-FROM python:${PY_VER}-alpine${ALPINE_VER}
+ARG OS_VER="3.17"
+FROM python:${PY_VER}-alpine${OS_VER}
 ARG SD_TAG="master"
 
 USER root
