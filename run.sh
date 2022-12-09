@@ -33,7 +33,7 @@ if [ -e "${SAVE_FILE_LOC}" ]; then
     NUM_DBS=$(find "${OUTPUT_LOC}" -type f -name "*.db" -print | wc -l)
   fi
   # Parse saves if saves exist and nothing has been parsed before
-  if [ $NUM_SAVES -gt 0 ] && [ $NUM_DBS -eq 0 ] && [ -z "$SKIP_INITIAL_PARSE" ]; then
+  if [ $NUM_SAVES -gt 0 ] && [ $NUM_DBS -eq 0 ] && [ "$SKIP_INITIAL_PARSE" = "true" ]; then
     echo " ** PARSING EXISTING SAVES -- THIS MAY TAKE A WHILE -- CONTINUING IN 5s **"
     sleep 5
     python -m stellarisdashboard.cli parse-saves

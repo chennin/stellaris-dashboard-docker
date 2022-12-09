@@ -2,17 +2,17 @@ version: '2.4'
 services:
   stellaris-dashboard:
     container_name: stellaris-dashboard
-    image: #####:latest
+    image: forbiddenlake/sd-test:latest
     restart: unless-stopped
     environment:
-      # Set SKIP_INITIAL_PARSE to anything to skip parsing existing saves
-      # when no parses exist. Leave it unset to parse them.
-      SKIP_INITIAL_PARSE: "yes"
+      # Set SKIP_INITIAL_PARSE to "true" to skip parsing existing saves
+      # when no parses exist. Case sensitive.
+      SKIP_INITIAL_PARSE: "true"
     ports:
       - '127.0.0.1:28053:28053'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
-      - './saves:/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games:ro'
-      - './localisation:/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english:ro'
-      - './output:/home/stellaris/stellaris-dashboard/output'
-#      - './config.yml:/home/stellaris/stellaris-dashboard/config.yml'
+      - '${HOST_SAVE_DIR}:/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games:ro'
+      - '${HOST_LOCALISATION_DIR}:/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english:ro'
+      - '${OUTPUT_DIR}:/home/stellaris/stellaris-dashboard/output'
+      - '${CONFIG_FILE}:/home/stellaris/stellaris-dashboard/config.yml'
