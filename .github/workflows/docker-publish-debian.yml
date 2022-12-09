@@ -1,6 +1,8 @@
 name: Docker Debian
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '07 16 * * THU'
 
 jobs:
   run-build:

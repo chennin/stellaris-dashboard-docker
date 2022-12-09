@@ -1,6 +1,8 @@
 name: Docker Alpine
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '57 16 * * THU'
 
 jobs:
   run-build:
