@@ -89,7 +89,6 @@ jobs:
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest-${{ inputs.osname }}" >> $GITHUB_OUTPUT
       - run: echo "${{ join(steps.*.outputs.tag) }}"
-      # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
         id: build-and-push
