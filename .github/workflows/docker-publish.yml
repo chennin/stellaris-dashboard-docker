@@ -58,6 +58,8 @@ jobs:
         exclude:
           - pyver: "3.11"
             checkout: "v4.3"
+          - osver: "3.17"
+            checkout: "v4.3"
     permissions:
       contents: read
       packages: write
