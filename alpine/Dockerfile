@@ -25,7 +25,7 @@ RUN git clone https://github.com/eliasdoehne/stellaris-dashboard.git && \
     git -C stellaris-dashboard -c advice.detachedHead=false checkout "$SD_TAG"
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir wheel setuptools && \
     pip install --no-cache-dir Cython && \
-    pip install --no-cache-dir -r stellaris-dashboard/requirements.txt && \
+    pip install --no-cache-dir --extra-index-url https://alpine-wheels.github.io/index -r stellaris-dashboard/requirements.txt && \
     pip cache purge
 
 WORKDIR /home/stellaris/stellaris-dashboard
