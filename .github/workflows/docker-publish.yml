@@ -50,6 +50,7 @@ jobs:
     needs:
       - get-refs
     strategy:
+      fail-fast: false
       matrix:
         pyver: ${{ fromJSON(inputs.pythonvers) }}
         osver: ${{ fromJSON(inputs.osvers) }}
