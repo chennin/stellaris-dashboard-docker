@@ -25,7 +25,7 @@ RUN git clone https://github.com/eliasdoehne/stellaris-dashboard.git && \
     git -C stellaris-dashboard -c advice.detachedHead=false checkout "$SD_TAG"
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir wheel setuptools && \
     pip install --no-cache-dir Cython && \
-    pip install --no-cache-dir -r stellaris-dashboard/requirements.txt --no-binary=numpy,scipy,matplotlib --use-pep517 --use-feature=no-binary-enable-wheel-cache && \
+    pip install --no-cache-dir -r stellaris-dashboard/requirements.txt && \
     pip cache purge
 
 WORKDIR /home/stellaris/stellaris-dashboard
