@@ -55,6 +55,13 @@ jobs:
         pyver: ${{ fromJSON(inputs.pythonvers) }}
         osver: ${{ fromJSON(inputs.osvers) }}
         checkout: ${{ fromJSON(needs.get-refs.outputs.buildrefs) }}
+        exclude:
+          - pyver: "3.11"
+            osver: "debian"
+            checkout: "v4.3"
+          - pyver: "3.11"
+            osver: "alpine"
+            checkout: "v4.3"
     permissions:
       contents: read
       packages: write
