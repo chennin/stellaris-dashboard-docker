@@ -1,6 +1,11 @@
 name: Docker Alpine
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Git branch to checkout"
+        default: ""
+        required: true
   schedule:
     - cron:  '57 16 * * THU'
 

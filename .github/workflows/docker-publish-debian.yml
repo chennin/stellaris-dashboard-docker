@@ -1,6 +1,11 @@
 name: Docker Debian
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Git branch to checkout"
+        default: ""
+        required: true
   schedule:
     - cron:  '07 16 * * THU'
 
@@ -13,3 +18,4 @@ jobs:
       osstablever: 'bullseye'
       pythonvers: '[ "3.8", "3.10", "3.11" ]'
       osvers: '[ "bullseye" ]'
+      branch: '${{ github.event.inputs.branch }}'

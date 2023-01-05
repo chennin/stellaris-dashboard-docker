@@ -19,6 +19,10 @@ on:
         required: true
         type: string
         description: 'JSON array of OS versions to build'
+      branch:
+        required: false
+        type: string
+        default: ""
 
 env:
   REGISTRY: docker.io
@@ -31,17 +35,27 @@ jobs:
   get-refs:
     runs-on: ubuntu-latest
     steps:
+      # Build the latest tag and master if no branch is provided
       - id: upstream
         uses: oprypin/find-latest-tag@v1
         with:
           repository: eliasdoehne/stellaris-dashboard
           releases-only: true
+        if: inputs.branch == ''
       - id: latest-release
         run: |
           echo "buildref=${{ steps.upstream.outputs.tag }}" >> $GITHUB_OUTPUT
+        if: inputs.branch == ''
       - id: main-branch
         run: |
           echo "buildref=${{ env.MAIN_BRANCH }}" >> $GITHUB_OUTPUT
+        if: inputs.branch == ''
+      # Build only the branch if one is provided
+      - id: manual-branch
+        run: |
+          echo "buildref=${{ inputs.branch }}" >> $GITHUB_OUTPUT
+        if: inputs.branch != ''
+
       - run: echo "Refs to build ${{ toJSON(steps.*.outputs.buildref) }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
