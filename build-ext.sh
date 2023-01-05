@@ -15,7 +15,7 @@ if [ -e stellarisdashboard/parsing/rust_parser ]; then
     *) ;;
   esac
   cargo build --release --manifest-path=stellarisdashboard/parsing/rust_parser/Cargo.toml
-  cp -p ./stellarisdashboard/parsing/rust_parser/target/release/librust_parser.so .
+  cp -p ./stellarisdashboard/parsing/rust_parser/target/release/librust_parser.so ./rust_parser.so
   #rm -rf "$HOME/.cargo/registry"
   rustup self uninstall -y
 fi
