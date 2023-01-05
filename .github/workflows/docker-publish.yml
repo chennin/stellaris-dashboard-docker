@@ -59,6 +59,7 @@ jobs:
       - run: echo "Refs to build ${{ toJSON(steps.*.outputs.buildref) }}"
     outputs:
       buildrefs: ${{ toJSON(steps.*.outputs.buildref) }}
+      latesttag: ${{ steps.upstream.outputs.tag }}
   build:
     runs-on: ubuntu-latest
     needs:
@@ -100,7 +101,7 @@ jobs:
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:${{ matrix.checkout }}-${{ inputs.osname }}-${{ matrix.osver }}-py${{ matrix.pyver }}" >> $GITHUB_OUTPUT
       - id: tag-latest
-        if: ${{ env.STABLE_OS == inputs.osname && matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout != 'master' }}
+        if: ${{ env.STABLE_OS == inputs.osname && matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout == needs.get-refs.outputs.latesttag }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
       - id: tag-latest-os
