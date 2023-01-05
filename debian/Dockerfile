@@ -8,7 +8,7 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y dist-upgrade && \
     apt-get -y --no-install-recommends install \
-      gcc libc6-dev \
+      gcc libc6-dev curl \
       dumb-init \
       git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -23,13 +23,14 @@ RUN git clone https://github.com/eliasdoehne/stellaris-dashboard.git && \
     git -C stellaris-dashboard -c advice.detachedHead=false checkout "$SD_TAG"
 RUN pip install --upgrade pip && pip install wheel setuptools && \
     pip install Cython && \
-    pip install -r stellaris-dashboard/requirements.txt && \
+    pip install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt && \
     pip cache purge
 
 WORKDIR /home/stellaris/stellaris-dashboard
-RUN python setup.py build_ext --inplace
 
 COPY run.sh /run.sh
+COPY build-ext.sh /build-ext.sh
+RUN /build-ext.sh
 
 EXPOSE 28053
 
