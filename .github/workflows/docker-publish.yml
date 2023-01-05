@@ -105,7 +105,7 @@ jobs:
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
       - id: tag-latest-os
-        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout != 'master' }}
+        if: ${{ matrix.osver == inputs.osstablever && matrix.pyver == env.STABLE_PY && matrix.checkout == needs.get-refs.outputs.latesttag }}
         run: |
           echo "tag=${{ env.IMAGE_NAME }}:latest-${{ inputs.osname }}" >> $GITHUB_OUTPUT
       - run: echo "${{ join(steps.*.outputs.tag) }}"
