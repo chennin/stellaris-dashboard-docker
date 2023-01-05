@@ -5,7 +5,7 @@ on:
       branch:
         description: "Git branch to checkout"
         default: ""
-        required: true
+        required: false
   schedule:
     - cron:  '57 16 * * THU'
 
@@ -18,3 +18,4 @@ jobs:
       osstablever: '3.17'
       pythonvers: '[ "3.10", "3.11" ]'
       osvers: '[ "3.17" ]'
+      branch: '${{ github.event.inputs.branch }}'
