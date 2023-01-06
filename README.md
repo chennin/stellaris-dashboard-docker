@@ -4,12 +4,6 @@ Docker builds for [Stellaris Dashboard](https://github.com/eliasdoehne/stellaris
 
 # Setup
 
-## Clone this repository
-
-```
-git clone https://github.com/chennin/stellaris-dashboard-docker.git
-```
-
 ## config.yml
 
 Most of the configuration settings can be edited in the dashboard itself, but the settings might be lost if you don't mount `config.yml` outside the container. Prepare for that with:
