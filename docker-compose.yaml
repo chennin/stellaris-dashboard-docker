@@ -2,7 +2,7 @@ version: '2.4'
 services:
   stellaris-dashboard:
     container_name: stellaris-dashboard
-    image: forbiddenlake/sd-test:latest
+    image: forbiddenlake/stellaris-dashboard:latest
     restart: unless-stopped
     environment:
       # Set SKIP_INITIAL_PARSE to "true" to skip parsing existing saves
