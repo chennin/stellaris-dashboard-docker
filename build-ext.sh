@@ -14,8 +14,9 @@ if [ -e stellarisdashboard/parsing/rust_parser ]; then
     *"-musl")  export RUSTFLAGS="-C target-feature=-crt-static" ;;
     *) ;;
   esac
-  cargo build --release --manifest-path=stellarisdashboard/parsing/rust_parser/Cargo.toml
-  cp -p ./stellarisdashboard/parsing/rust_parser/target/release/librust_parser.so ./rust_parser.so
+  cd stellarisdashboard/parsing/rust_parser
+  # https://github.com/PyO3/maturin/issues/284
+  env VIRTUAL_ENV=$(python3 -c 'import sys; print(sys.base_prefix)') maturin develop -r
   #rm -rf "$HOME/.cargo/registry"
   rustup self uninstall -y
 fi
