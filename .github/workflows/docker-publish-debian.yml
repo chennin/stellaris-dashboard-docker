@@ -16,6 +16,6 @@ jobs:
     with:
       osname: 'debian'
       osstablever: 'bullseye'
-      pythonvers: '[ "3.10", "3.11" ]'
-      osvers: '[ "bullseye" ]'
+      pythonvers: '[ "3.10", "3.11"]'
+      osvers: '[ "bullseye", "bookworm" ]'
       branch: '${{ github.event.inputs.branch }}'
