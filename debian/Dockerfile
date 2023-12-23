@@ -22,10 +22,9 @@ ENV PATH "/home/stellaris/.local/bin:$PATH"
 RUN mkdir -p "/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games" "/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english"
 RUN git clone $GIT_REPO && \
     git -C stellaris-dashboard -c advice.detachedHead=false checkout "$SD_TAG"
-RUN pip install --upgrade pip && pip install wheel setuptools && \
-    pip install Cython patchelf && \
-    pip install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt && \
-    pip cache purge
+RUN pip install --no-cache-dir --upgrade pip && pip --no-cache-dir install wheel setuptools && \
+    pip --no-cache-dir install Cython patchelf && \
+    pip --no-cache-dir install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
 
 WORKDIR /home/stellaris/stellaris-dashboard
 
