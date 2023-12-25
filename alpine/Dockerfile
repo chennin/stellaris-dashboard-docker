@@ -2,6 +2,8 @@ ARG PY_VER="3.10"
 ARG OS_VER="3.17"
 FROM python:${PY_VER}-alpine${OS_VER}
 ARG SD_TAG="master"
+ARG GIT_SD_USER="eliasdoehne"
+ARG GIT_SD_NAME="stellaris-dashboard"
 
 USER root
 RUN apk update && apk upgrade && \
@@ -20,8 +22,8 @@ ENV CXXFLAGS "$CFLAGS"
 ENV LDFLAGS "$CFLAGS"
 
 RUN mkdir -p "/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games" "/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english"
-RUN git clone https://github.com/eliasdoehne/stellaris-dashboard.git && \
-    git -C stellaris-dashboard -c advice.detachedHead=false checkout "$SD_TAG"
+ADD --chown=stellaris https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/heads/$SD_TAG sd_version.json
+RUN git clone -b "$SD_TAG" -c advice.detachedHead=false https://github.com/$GIT_SD_USER/$GIT_SD_NAME.git
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir wheel setuptools && \
     pip install --no-cache-dir Cython patchelf && \
     pip install --no-cache-dir --extra-index-url https://alpine-wheels.github.io/index -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
