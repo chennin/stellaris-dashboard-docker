@@ -22,7 +22,11 @@ ENV CXXFLAGS "$CFLAGS"
 ENV LDFLAGS "$CFLAGS"
 
 RUN mkdir -p "/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games" "/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english"
-ADD --chown=stellaris https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/heads/$SD_TAG sd_version.json
+RUN if [ "${SD_TAG}" = "master" ]; then \
+      curl --no-progress-meter -o sd_version.json "https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/heads/$SD_TAG"; \
+    else \
+      curl --no-progress-meter -o sd_version.json "https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/tags/$SD_TAG"; \
+    fi
 RUN git clone -b "$SD_TAG" -c advice.detachedHead=false https://github.com/$GIT_SD_USER/$GIT_SD_NAME.git
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir wheel setuptools && \
     pip install --no-cache-dir Cython patchelf && \
