@@ -37,6 +37,10 @@ COPY run.sh /run.sh
 COPY build-ext.sh /build-ext.sh
 RUN /build-ext.sh
 
+USER root
+RUN apt-get -y purge gcc curl libc6-dev git && apt-get -y autoremove
+USER stellaris
+
 EXPOSE 28053
 
 ENTRYPOINT ["dumb-init"]
