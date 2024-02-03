@@ -5,7 +5,7 @@ echo "Building Cython/Rust extensions"
 
 cd /home/stellaris/stellaris-dashboard
 
-python setup.py build_ext --inplace
+# python setup.py build_ext --inplace # No longer used
 
 if [ -e stellarisdashboard/parsing/rust_parser ]; then
   curl -sSf https://sh.rustup.rs | sh -s -- -y
