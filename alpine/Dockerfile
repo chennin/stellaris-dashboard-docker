@@ -1,6 +1,6 @@
 ARG PY_VER="3.10"
 ARG OS_VER="3.17"
-FROM python:${PY_VER}-alpine${OS_VER}
+FROM python:${PY_VER}-alpine${OS_VER} AS base
 ARG SD_TAG="master"
 ARG GIT_SD_USER="eliasdoehne"
 ARG GIT_SD_NAME="stellaris-dashboard"
@@ -8,9 +8,7 @@ ARG GIT_SD_NAME="stellaris-dashboard"
 USER root
 RUN apk update && apk upgrade && \
     apk --no-cache add \
-      dumb-init \
-      openblas libstdc++ \
-      git gcc libc-dev g++ gfortran openblas-dev yaml-dev make curl && \
+      dumb-init curl git libstdc++ openblas && \
     rm -rf /var/cache/apk/*
 RUN adduser --disabled-password stellaris
 
@@ -32,16 +30,24 @@ RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir wheel
     pip install --no-cache-dir Cython patchelf && \
     pip install --no-cache-dir --extra-index-url https://alpine-wheels.github.io/index -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
 
-WORKDIR /home/stellaris/stellaris-dashboard
-
 COPY run.sh /run.sh
 COPY build-ext.sh /build-ext.sh
+
+FROM base AS build
+USER root
+RUN apk update && \
+    apk --no-cache add \
+      gcc libc-dev g++ gfortran openblas-dev yaml-dev make && \
+    rm -rf /var/cache/apk/*
+USER stellaris
 RUN /build-ext.sh
 
-USER root
-RUN apk del gcc g++ gfortran libc-dev git openblas-dev yaml-dev make
+FROM base AS final
+ARG PY_VER
+COPY --from=build --chown=stellaris:stellaris /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser/* /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser/
+COPY --from=build --chown=stellaris:stellaris /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser-0.1.0.dist-info/* /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser-0.1.0.dist-info/
 
-USER stellaris
+WORKDIR /home/stellaris/stellaris-dashboard
 
 EXPOSE 28053
 
