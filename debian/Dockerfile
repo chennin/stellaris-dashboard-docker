@@ -1,6 +1,6 @@
 ARG PY_VER="3.10"
 ARG OS_VER="bullseye"
-FROM python:${PY_VER}-slim-${OS_VER}
+FROM python:${PY_VER}-slim-${OS_VER} AS base
 ARG SD_TAG="master"
 ARG GIT_SD_USER="eliasdoehne"
 ARG GIT_SD_NAME="stellaris-dashboard"
@@ -10,10 +10,8 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y dist-upgrade && \
     apt-get -y --no-install-recommends install \
-      gcc libc6-dev curl \
-      dumb-init \
-      git && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+      dumb-init curl git && \
+    apt-get clean && rm -rf /var/lib/apt/* && rm /var/cache/debconf/* && find /var/log -type f -delete
 RUN useradd --create-home --shell /bin/bash stellaris
 
 USER stellaris
@@ -31,15 +29,22 @@ RUN pip install --no-cache-dir --upgrade pip && pip --no-cache-dir install wheel
     pip --no-cache-dir install Cython patchelf && \
     pip --no-cache-dir install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
 
-WORKDIR /home/stellaris/stellaris-dashboard
-
 COPY run.sh /run.sh
 COPY build-ext.sh /build-ext.sh
+
+FROM base AS build
+USER root
+RUN apt-get update && apt-get -y --no-install-recommends install \
+      gcc libc6-dev
+USER stellaris
 RUN /build-ext.sh
 
-USER root
-RUN apt-get -y purge gcc curl libc6-dev git && apt-get -y autoremove
-USER stellaris
+FROM base AS final
+ARG PY_VER
+COPY --from=build --chown=stellaris:stellaris /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser/* /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser/
+COPY --from=build --chown=stellaris:stellaris /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser-0.1.0.dist-info/* /home/stellaris/.local/lib/python${PY_VER}/site-packages/rust_parser-0.1.0.dist-info/
+
+WORKDIR /home/stellaris/stellaris-dashboard
 
 EXPOSE 28053
 
