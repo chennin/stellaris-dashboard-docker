@@ -129,7 +129,7 @@ jobs:
       - name: Test Docker image
         id: test
         run: |
-          docker run --rm ${{ join(steps.tag.outputs.tag, '-test') }} python -m pytest -m "not skip_github_actions"
+          docker run --rm ${{ join(steps.tag.outputs.tag, '-test') }} sh -c 'git submodule update --init --recursive; python -m pytest -m "not skip_github_actions"'
       - name: Push Docker image
         id: push
         uses: docker/build-push-action@v3
