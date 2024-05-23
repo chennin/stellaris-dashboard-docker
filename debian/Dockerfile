@@ -10,7 +10,8 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y dist-upgrade && \
     apt-get -y --no-install-recommends install \
-      dumb-init curl git && \
+      dumb-init curl git \
+      gcc g++ libc6-dev && \
     apt-get clean && rm -rf /var/lib/apt/* && rm /var/cache/debconf/* && find /var/log -type f -delete
 RUN useradd --create-home --shell /bin/bash stellaris
 
@@ -33,10 +34,6 @@ COPY run.sh /run.sh
 COPY build-ext.sh /build-ext.sh
 
 FROM base AS build
-USER root
-RUN apt-get update && apt-get -y --no-install-recommends install \
-      gcc libc6-dev
-USER stellaris
 RUN /build-ext.sh
 
 FROM base AS final
