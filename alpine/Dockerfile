@@ -8,7 +8,7 @@ ARG GIT_SD_NAME="stellaris-dashboard"
 USER root
 RUN apk update && apk upgrade && \
     apk --no-cache add \
-      dumb-init curl git libstdc++ openblas && \
+      dumb-init curl git libstdc++ openblas gcc g++ && \
     rm -rf /var/cache/apk/*
 RUN adduser --disabled-password stellaris
 
