@@ -75,6 +75,8 @@ jobs:
             checkout: "v4.3"
           - osver: "3.17"
             checkout: "v4.3"
+          - pyver: "3.12"
+            checkout: "v6.2"
     permissions:
       contents: read
       packages: write
