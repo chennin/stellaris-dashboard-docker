@@ -25,7 +25,7 @@ RUN if [ "${SD_TAG}" = "master" ]; then \
     else \
       curl --no-progress-meter -o sd_version.json "https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/tags/$SD_TAG"; \
     fi
-RUN git clone -b "$SD_TAG" -c advice.detachedHead=false https://github.com/$GIT_SD_USER/$GIT_SD_NAME.git
+RUN git clone -b "$SD_TAG" --single-branch --depth 1 -c advice.detachedHead=false https://github.com/$GIT_SD_USER/$GIT_SD_NAME.git
 RUN pip install --no-cache-dir --upgrade pip && pip --no-cache-dir install wheel setuptools && \
     pip --no-cache-dir install Cython patchelf && \
     pip --no-cache-dir install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
