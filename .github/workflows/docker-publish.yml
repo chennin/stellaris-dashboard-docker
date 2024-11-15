@@ -37,6 +37,7 @@ jobs:
     steps:
       # Build the latest tag and master if no branch is provided
       - id: upstream
+        # https://github.com/oprypin/find-latest-tag
         uses: oprypin/find-latest-tag@dd2729fe78b0bb55523ae2b2a310c6773a652bd1 # v1.1.2
         with:
           repository: eliasdoehne/stellaris-dashboard
@@ -114,7 +115,7 @@ jobs:
       # https://github.com/docker/build-push-action
       - name: Build Docker image
         id: build
-        uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: .
           load: true
@@ -134,7 +135,7 @@ jobs:
           docker run --rm ${{ join(steps.tag.outputs.tag, '-test') }} sh -c 'git submodule update --init --recursive; python -m pytest -m "not skip_github_actions"'
       - name: Push Docker image
         id: push
-        uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: .
           file: ${{ inputs.osname }}/Dockerfile
