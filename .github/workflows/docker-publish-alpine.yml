@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
     with:
       osname: 'alpine'
-      osstablever: '3.19'
+      osstablever: '3.20'
       pythonvers: '[ "3.11", "3.12" ]'
-      osvers: '[ "3.19", "3.20" ]'
+      osvers: '[ "3.20" ]'
       branch: '${{ github.event.inputs.branch }}'
