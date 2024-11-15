@@ -17,7 +17,7 @@ RUN useradd --create-home --shell /bin/bash stellaris
 
 USER stellaris
 WORKDIR /home/stellaris
-ENV PATH "/home/stellaris/.local/bin:$PATH"
+ENV PATH="/home/stellaris/.local/bin:$PATH"
 
 RUN mkdir -p "/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games" "/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english"
 RUN if [ "${SD_TAG}" = "master" ]; then \

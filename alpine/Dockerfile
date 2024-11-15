@@ -14,10 +14,10 @@ RUN adduser --disabled-password stellaris
 
 USER stellaris
 WORKDIR /home/stellaris
-ENV PATH "/home/stellaris/.local/bin:$PATH"
-ENV CFLAGS "-O3 -fstack-protector-strong -march=x86-64 -Wl,--strip-all -g0 -DNDEBUG"
-ENV CXXFLAGS "$CFLAGS"
-ENV LDFLAGS "$CFLAGS"
+ENV PATH="/home/stellaris/.local/bin:$PATH"
+ENV CFLAGS="-O3 -fstack-protector-strong -march=x86-64 -Wl,--strip-all -g0 -DNDEBUG"
+ENV CXXFLAGS="$CFLAGS"
+ENV LDFLAGS="$CFLAGS"
 
 RUN mkdir -p "/home/stellaris/.local/share/Paradox Interactive/Stellaris/save games" "/home/stellaris/.steam/steamapps/common/Stellaris/localisation/english"
 RUN if [ "${SD_TAG}" = "master" ]; then \

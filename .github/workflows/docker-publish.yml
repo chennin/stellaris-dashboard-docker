@@ -37,7 +37,7 @@ jobs:
     steps:
       # Build the latest tag and master if no branch is provided
       - id: upstream
-        uses: oprypin/find-latest-tag@v1
+        uses: oprypin/find-latest-tag@dd2729fe78b0bb55523ae2b2a310c6773a652bd1 # v1.1.2
         with:
           repository: eliasdoehne/stellaris-dashboard
           releases-only: true
@@ -84,12 +84,12 @@ jobs:
     steps:
       # https://github.com/docker/setup-buildx-action
       - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55 #v2.10.0
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@v2
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.DOCKER_USER }}
@@ -97,7 +97,7 @@ jobs:
 
       # https://github.com/actions/checkout
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - id: tag
         run: |
@@ -114,7 +114,7 @@ jobs:
       # https://github.com/docker/build-push-action
       - name: Build Docker image
         id: build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
         with:
           context: .
           load: true
@@ -134,7 +134,7 @@ jobs:
           docker run --rm ${{ join(steps.tag.outputs.tag, '-test') }} sh -c 'git submodule update --init --recursive; python -m pytest -m "not skip_github_actions"'
       - name: Push Docker image
         id: push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
         with:
           context: .
           file: ${{ inputs.osname }}/Dockerfile
