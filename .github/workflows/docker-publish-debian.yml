@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
     with:
       osname: 'debian'
-      osstablever: 'bookworm'
-      pythonvers: '[ "3.11", "3.12" ]'
-      osvers: '[ "bookworm", "trixie" ]'
+      osstablever: 'trixie'
+      pythonvers: '[ "3.12" ]'
+      osvers: '[ "trixie" ]'
       branch: '${{ github.event.inputs.branch }}'
