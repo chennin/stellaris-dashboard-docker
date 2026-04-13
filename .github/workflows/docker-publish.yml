@@ -28,7 +28,7 @@ env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKER_USER }}/stellaris-dashboard
   MAIN_BRANCH: master
-  STABLE_PY: "3.11"
+  STABLE_PY: "3.12"
   STABLE_OS: "debian"
 
 jobs:
