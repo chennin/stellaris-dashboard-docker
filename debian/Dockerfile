@@ -12,7 +12,7 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     apt-get -y --no-install-recommends install \
       dumb-init curl git \
       gcc g++ libc6-dev && \
-    apt-get clean && rm -rf /var/lib/apt/* && rm /var/cache/debconf/* && find /var/log -type f -delete
+    apt-get clean && rm -rf /var/lib/apt/* && rm -rf /var/cache/debconf/* && find /var/log -type f -delete
 RUN useradd --create-home --shell /bin/bash stellaris
 
 USER stellaris
