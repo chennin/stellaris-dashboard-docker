@@ -16,6 +16,6 @@ jobs:
     with:
       osname: 'alpine'
       osstablever: '3.23'
-      pythonvers: '[ "3.11", "3.12", "3.13" ]'
+      pythonvers: '[ "3.12" ]'
       osvers: '[ "3.23" ]'
       branch: '${{ github.event.inputs.branch }}'
