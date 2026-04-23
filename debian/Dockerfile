@@ -1,5 +1,5 @@
-ARG PY_VER="3.10"
-ARG OS_VER="bullseye"
+ARG PY_VER="3.12"
+ARG OS_VER="trixie"
 FROM python:${PY_VER}-slim-${OS_VER} AS base
 ARG SD_TAG="master"
 ARG GIT_SD_USER="eliasdoehne"
@@ -26,7 +26,9 @@ RUN if [ "${SD_TAG}" = "master" ]; then \
       curl --no-progress-meter -o sd_version.json "https://api.github.com/repos/$GIT_SD_USER/$GIT_SD_NAME/git/refs/tags/$SD_TAG"; \
     fi
 RUN git clone -b "$SD_TAG" --single-branch --depth 1 -c advice.detachedHead=false https://github.com/$GIT_SD_USER/$GIT_SD_NAME.git
-RUN pip install --no-cache-dir --upgrade pip && pip --no-cache-dir install wheel setuptools && \
+RUN pip install --no-cache-dir --upgrade pip && \
+    export PIP_UPLOADED_PRIOR_TO=$(date -u -d '3 days ago' '+%Y-%m-%dT%H:%M:%SZ') && \
+    pip --no-cache-dir install wheel setuptools && \
     pip --no-cache-dir install Cython patchelf && \
     pip --no-cache-dir install -r stellaris-dashboard/requirements.txt -r stellaris-dashboard/dev-requirements.txt
 
